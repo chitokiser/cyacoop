@@ -272,3 +272,8 @@ body {
 .small-text {
   font-size:0.8em; /* 글자 크기를 80%로 설정 */
 }
+
+.image-spacing {
+  margin-right: 10px;
+  margin-bottom: 10px; /* 아래쪽 간격도 추가 가능 */
+}
