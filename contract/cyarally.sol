@@ -12,6 +12,14 @@ pragma solidity >=0.7.0 <0.9.0;
   }
   
 
+  interface Icut{
+  function balanceOf(address account) external view returns (uint256);
+  function allowance(address owner, address spender) external view returns (uint256);
+  function transfer(address recipient, uint256 amount) external returns (bool);
+  function approve(address spender, uint256 amount) external returns (bool);
+  function transferFrom(address sender, address recipient, uint256 amount) external returns (bool); 
+  }
+
 
     interface Icutbank{      // 컷뱅크
      function depoup(address _user, uint _depo) external;
@@ -26,37 +34,39 @@ pragma solidity >=0.7.0 <0.9.0;
   }  
     
  
-contract deduction {    // 공제
+contract cyarally {   
   
   Icya cya;
+  Icut cut;
   Icutbank cutbank;
   address public admin; 
-  address public taxbank;
+  address public cbank; 
   uint256 public mid;  
-  uint256 public exp; 
- 
-  uint8 public lot; //1lot당 보상비
+  uint256 public fee; //계좌등록비용
  
   
 
   mapping(address => uint8)public staff;
+  mapping(address => uint8)public myfee; //기본값
   mapping(uint256 => meta)public metainfo;  
 
       
       
-   constructor(address _cya, address _cutbank) {
+   constructor(address _cya,address _cut, address _cutbank) {
     cya = Icya(_cya);
+    cut = Icut(_cut);
     cutbank = Icutbank(_cutbank);
+    cbank = _cutbank;
     admin = msg.sender;
     staff[msg.sender] = 5;
-    lot = 4;
+    fee = 30*1e18; //최초 30cya
 }
 
 
 
     struct meta{
     uint256 time; //가입날짜 
-    uint256 money; //보상처리결과
+    uint256 cutreward; //보상처리결과
     uint256 mid;  
     uint256 metanum;  //가입계좌 번호
     uint256 init;  //최초가격
@@ -73,9 +83,10 @@ contract deduction {    // 공제
 
 
 
-function accession(uint256 _init,uint256 _metanum)public {   //공제가입
-    uint pay = _init*1e18*10/100; //보험료 10%   
+function registration(uint256 _metanum)public {   //랠리 참여 계좌등록
+    uint pay = (myfee[msg.sender]+1)*fee ; //최초값이 0이기 때문에 +1   
     require(cya.balanceOf(msg.sender) >= pay,"no cya");    
+    require(cut.balanceOf(msg.sender) >= 5000,"no member"); 
     cya.approve(msg.sender, pay); 
     uint256 allowance = cya.allowance(msg.sender, address(this));
     require(allowance >= pay, "Check the token allowance");
@@ -85,8 +96,9 @@ function accession(uint256 _init,uint256 _metanum)public {   //공제가입
     metainfo[mid].time = block.timestamp;
     metainfo[mid].mid = mid;
     metainfo[mid].metanum = _metanum;
-    metainfo[mid].init = _init;
+    metainfo[mid].init = 3000*1e18;
     metainfo[mid].owner = msg.sender;
+    myfee[msg.sender] += 1;  //다음계좌등록시 등록비 증가
     mid += 1;
 } 
 
@@ -101,50 +113,58 @@ function exit(uint256 _mid)public {   //보상신청
 } 
 
 
-function audit(uint256 _mid,uint256 _money)public {   //보상검증
+function audit(uint256 _mid,uint256 _cutreward)public {   //보상검증
     
     require(staff[msg.sender] >= 5,"no staff");   
    
-    metainfo[_mid].money = _money*1e18; //보상신청 상태 
+    metainfo[_mid].cutreward = _cutreward; // cut 소수점 없음
     metainfo[_mid].act = 2; //처리완료
+
 } 
 
-function reaudit(uint256 _mid,uint256 _money)public {   //보상수정
+function reaudit(uint256 _mid,uint256 _cutreward)public {   //보상검증
     
     require(staff[msg.sender] >= 5,"no staff");   
    
-    metainfo[_mid].money = _money*1e18; //보상신청 상태 
+    metainfo[_mid].cutreward = _cutreward; //보상신청 상태 
     metainfo[_mid].act = 2; //처리완료
 } 
 
 
 
-
-function  withdraw(uint256 _mid)public {   //인출
+function  withdrw(uint256 _mid)public {   //인출
+    uint pay = metainfo[_mid].cutreward;
     require( metainfo[_mid].owner == msg.sender,"no owner");   
-    require( metainfo[_mid].act == 2,"Does not meet requirements");  
+    require( metainfo[_mid].act == 2,"Processing");  
+    require(cut.balanceOf(address(this)) >= pay,"no cut"); 
+
     metainfo[_mid].act = 3; //인출완료
-    cya.transfer(msg.sender,metainfo[_mid].money);
+    cut.transfer(msg.sender,pay);
+    cya.transfer(cbank,g1());
 } 
     
-    function lotup(uint8 _lot) public {  //가격 
+    function feeup(uint8 _fee) public {  //기본값 30e18
       require(staff[msg.sender] >= 5,"no staff");
-      lot = _lot;
+      fee = _fee*1e18;
     }
     
   
  
   
- function g1() public view virtual returns(uint256){  
+  function g1() public view virtual returns(uint256){  
   return cya.balanceOf(address(this));
   }
 
   function g2(address user) public view virtual returns(uint256){  
   return cya.balanceOf(user);
   }
-  
+    function g3() public view virtual returns(uint256){  
+  return cut.balanceOf(address(this));
+  }
 
-
+ function g4(address user) public view virtual returns(uint256){  
+  return cut.balanceOf(user);
+  }
 }
 
 
