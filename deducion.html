@@ -119,7 +119,7 @@
       <p>공제 가입된 실계좌에 대해 계좌청산을 당하면 보상해드립니다 </p>
       <p>공제가입비는 가입하려는 계좌잔고의 1/10 이며 1회 납입입니다</p>
       <p>공제가입 날짜 기준으로 보상합니다</p>
-      <p>보상비 = 누적 거래량 lot당 $4 입니다</p>
+      <p>보상비 계산방법 = 가입 계좌의 누적 거래량 검토 후 lot당 4CYA를 보상하며 1CYA 이하는 생략 합니다</p>
       </div>
     </div>
 
@@ -130,13 +130,13 @@
         </div>
         <p>소유하고 계신 Vantage 실계좌 번호와 현재잔액(소수점제외)을 정확히 입력하시고 가입하기 버튼을 누르세요</p>
         <p>가입하려는 실계좌의 잔금과 입력한 내용이 일치해야 합니다</p>
-        <p>공제가입비는  입력한 실계좌 잔금의 1/10이며 해당하는 금액의 CYA가 차감됩니다</p>
-        <p>멘토를 통해서 가입한 계좌만 보상이 가능하오니 가입전 멘토에게 확인 바랍니다</p>
+        <p>공제가입버튼을 누르면 입력한 실계좌 잔금의 1/10이며 해당하는 금액의 CYA가 자동 차감됩니다</p>
+        <p>멘토를 통해서 Vantage에 가입한 실계좌만 보상이 가능하오니 가입전 공제가입 가능여부를 확인 바랍니다</p>
         <li class="list-group-item">공제보상 계좌 잔액: <span id="Ibal">-</span>CYA </li>
         <div class="input-group mb-3">
           <input type="text" id="Account" class="form-control" placeholder="실계좌번호를 정확히 입력하세요" aria-label="CYA"
             aria-describedby="basic-addon2">
-            <input type="text" id="chargeAmount" class="form-control" placeholder="현재 잔고를 소수점을 제외하고 입력하세요" aria-label="CYA"
+            <input type="text" id="Amount" class="form-control" placeholder="현재 잔고를 소수점을 제외하고 입력하세요" aria-label="CYA"
             aria-describedby="basic-addon2">
           <span class="input-group-text" id="basic-addon2" style="cursor: pointer;" onclick="Accession()">공제가입하기</span>
         </div>

@@ -49,57 +49,56 @@
        document.getElementById("Mutbal").innerHTML = (mutbal);
        document.getElementById("Mutcir").innerHTML = (mutcir);
        document.getElementById("Mprice").innerHTML = (iprice/1e18).toFixed(4);
-       document.getElementById("Mallow").innerHTML = (iallow/1e18).toFixed(8);
+       document.getElementById("Mallow").innerHTML = (iallow*10/2000/1e18*52).toFixed(8);
        document.getElementById("Act").innerHTML = (iact);
      };
   
      topMut();
 
 
-  let cutmemberLogin = async () => {
-    let userProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    await window.ethereum.request({
-      method: "wallet_addEthereumChain",
-      params: [{
-          chainId: "0xCC",
-          rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
-          chainName: "opBNB",
-          nativeCurrency: {
-              name: "BNB",
-              symbol: "BNB",
-              decimals: 18
-          },
-          blockExplorerUrls: ["https://opbnbscan.com"]
-      }]
-  });
-    await userProvider.send("eth_requestAccounts", []);
-    let provider = new ethers.providers.JsonRpcProvider('https://opbnb-mainnet-rpc.bnbchain.org');
-    let signer = userProvider.getSigner();
-    let cyabankContract = new ethers.Contract(contractAddress.cyabankAddr, contractAbi.cyabank, signer);
-    let cyabankContract2 = new ethers.Contract(contractAddress.cyabankAddr, contractAbi.cyabank, provider);
-    let mycut = parseInt(await cyabankContract.g8(await signer.getAddress()));
-    let bankprice = parseInt(await cyabankContract2.getprice());
-    let myallow= parseInt(await cyabankContract.getpay(await signer.getAddress()));
-  
-  
-    document.getElementById("myCut").innerHTML = (mycut).toFixed(0);
-    document.getElementById("myCutvalue").innerHTML = (mycut*(bankprice/1e18)).toFixed(4);
-    document.getElementById("myAllow").innerHTML = (myallow/1e18).toFixed(4);
+     let cutmemberLogin = async () => {
+      let userProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
+      await window.ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [{
+            chainId: "0xCC",
+            rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
+            chainName: "opBNB",
+            nativeCurrency: {
+                name: "BNB",
+                symbol: "BNB",
+                decimals: 18
+            },
+            blockExplorerUrls: ["https://opbnbscan.com"]
+        }]
+    });
+      await userProvider.send("eth_requestAccounts", []);
+      let provider = new ethers.providers.JsonRpcProvider('https://opbnb-mainnet-rpc.bnbchain.org');
+      let signer = userProvider.getSigner();
+      let cyabankContract = new ethers.Contract(contractAddress.cyabankAddr, contractAbi.cyabank, signer);
+      let cyabankContract2 = new ethers.Contract(contractAddress.cyabankAddr, contractAbi.cyabank, provider);
+      let mycut = parseInt(await cyabankContract.g8(await signer.getAddress()));
+      let bankprice = parseInt(await cyabankContract2.getprice());
+      let myallow= parseInt(await cyabankContract.getpay(await signer.getAddress()));
     
-   
+    
+      document.getElementById("myCut").innerHTML = (mycut).toFixed(0);
+      document.getElementById("myCutvalue").innerHTML = (mycut*(bankprice/1e18)).toFixed(4);
+      document.getElementById("myAllow").innerHTML = (myallow/1e18).toFixed(4);
+      
+     
+    
+      let myt = parseInt(await cyabankContract2.allowt(await signer.getAddress()));
+      let time2 = parseInt(604800); 
+      let nowt = Math.floor(new Date().getTime()/ 1000);
+      let left = parseInt((myt + time2)- nowt );
+      let day = parseInt(left/60/60/24);
+      let hour = parseInt(left/3600)%24;
+      let min = parseInt((left/60)%60);
+      let sec = left%60;
   
-    let myt = parseInt(await cyabankContract2.allowt(await signer.getAddress()));
-    let time2 = parseInt(604800); 
-    let nowt = Math.floor(new Date().getTime()/ 1000);
-    let left = parseInt((myt + time2)- nowt );
-    let day = parseInt(left/60/60/24);
-    let hour = parseInt(left/3600)%24;
-    let min = parseInt((left/60)%60);
-    let sec = left%60;
-
-    document.getElementById("epsLeftTime").innerHTML = left > 0 ? `${day}일${hour}시간${min}분${sec}초` : '';
-  };
-
+      document.getElementById("epsLeftTime").innerHTML = left > 0 ? `${day}일${hour}시간${min}분${sec}초` : '';
+    };
 
   let Allow = async () => {
     let userProvider = new ethers.providers.Web3Provider(window.ethereum, "any");

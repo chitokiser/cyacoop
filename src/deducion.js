@@ -6,7 +6,7 @@ let metaddr = {
 let metabi = {
 
   metmarket: [
-      "function accession(uint256 _init,uint256 _metanum)public",
+    "function accession(uint256 _init,uint256 _metanum)public ",
       "function exit(uint256 _mid)public",
       "function  withdrw(uint256 _mid)public",
      "function mid() public view returns (uint256)",
@@ -164,8 +164,8 @@ try {
 
 
 
-// 판매등록 함수 구현
-const registerSale = async (button) => {
+// 보상신청 함수 구현
+const registerSale = async (button) => {   
 try {
   const accountId = button.getAttribute("data-id"); // 버튼의 data-id 속성 값 가져오기
   const saleAmountInput = document.getElementById(`saleAmount${accountId}`); // 해당 ID의 판매금액 입력란 가져오기
@@ -196,7 +196,7 @@ try {
 }
 };
 
-let Charge = async () => {
+let Accession = async () => {
 let userProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
 await window.ethereum.request({
   method: "wallet_addEthereumChain",
@@ -216,9 +216,10 @@ await userProvider.send("eth_requestAccounts", []);
 let signer = userProvider.getSigner();
 
 let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, signer);
-
+const account = document.getElementById('Account').value;
+const amount = document.getElementById('Amount').value;
 try {
-  await meta5Contract.charge(document.getElementById('chargeAmount').value);
+  await meta5Contract.accession(document.getElementById(amount,account).value);
 } catch(e) {
   alert(e.data.message.replace('execution reverted: ',''))
 }
