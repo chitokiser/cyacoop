@@ -6,13 +6,12 @@ let metaddr = {
 let metabi = {
 
   metmarket: [
-    "function accession(uint256 _init,uint256 _metanum)public ",
+    "function accession(uint256 _init,uint256 _metanum)public",
       "function exit(uint256 _mid)public",
-      "function  withdrw(uint256 _mid)public",
+      "function withdrw(uint256 _mid)public",
      "function mid() public view returns (uint256)",
      "function g1() public view virtual returns(uint256)",
      "function g2() public view virtual returns(uint256)",
- 
      "function metainfo(uint256 _mid) public view virtual returns(uint256,uint256,uint256,uint256,uint256,address,uint8)",
     
     ],
@@ -80,7 +79,7 @@ try {
           let purchasableStatus;
           switch (metaInfo.info6) {
             case 0:
-              purchasableStatus = '보상 요청을 하지않은 상태입니다';
+              purchasableStatus = '보상 신청을 하지않은 상태입니다';
               break;
               case 1:
                   purchasableStatus = '보상신청이 완료되고 심사중입니다';
@@ -109,7 +108,7 @@ try {
                 <p class="card-text"><strong>가입자:</strong> ${metaInfo.info5}</p>
                 <p class="card-text"><strong>승인된 보상금액:</strong> ${metaInfo.info1}</p>
                 <button type="button" class="btn btn-primary btn-sm mr-2" onclick="purchase(this)" data-id="${i}">보상신청</button>
-                <button type="button" class="btn btn-dark btn-sm mr-2" onclick="registerSale(this)" data-id="${i}">보상금인출하기</button>
+                <button type="button" class="btn btn-dark btn-sm mr-2" onclick="Withdraw(this)" data-id="${i}">보상금인출하기</button>
          
             </div>
         </div>`;
@@ -156,7 +155,7 @@ try {
   const signer = userProvider.getSigner();
 
   let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, signer);
-  await meta5Contract.buy(accountId); // 해당 ID를 buy 함수에 전달하여 구매
+  await meta5Contract.exit(accountId); // 해당 ID를 요청함수에 전달
 } catch(e) {
   alert(e.data.message.replace('execution reverted: ',''))
 }
@@ -164,37 +163,35 @@ try {
 
 
 
-// 보상신청 함수 구현
-const registerSale = async (button) => {   
-try {
-  const accountId = button.getAttribute("data-id"); // 버튼의 data-id 속성 값 가져오기
-  const saleAmountInput = document.getElementById(`saleAmount${accountId}`); // 해당 ID의 판매금액 입력란 가져오기
-  const saleAmount = parseInt(saleAmountInput.value); // 판매금액 입력란의 값 가져와서 정수형으로 변환
 
-  const userProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
-  await window.ethereum.request({
-    method: "wallet_addEthereumChain",
-    params: [{
-        chainId: "0xCC",
-        rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
-        chainName: "opBNB",
-        nativeCurrency: {
-            name: "BNB",
-            symbol: "BNB",
-            decimals: 18
-        },
-        blockExplorerUrls: ["https://opbnbscan.com"]
-    }]
-  });
-  await userProvider.send("eth_requestAccounts", []);
-  const signer = userProvider.getSigner();
-
-  let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, signer);
-  await meta5Contract.selladd(accountId, saleAmount);
-} catch(e) {
-  alert(e.data.message.replace('execution reverted: ',''))
-}
-};
+// JavaScript에서 해당 ID 값을 가져와서 구매 함수 호출
+const  Withdraw = async (button) => {
+  try {
+    const accountId = button.getAttribute("data-id"); // 버튼의 data-id 속성 값 가져오기
+    const userProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    await window.ethereum.request({
+      method: "wallet_addEthereumChain",
+      params: [{
+          chainId: "0xCC",
+          rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
+          chainName: "opBNB",
+          nativeCurrency: {
+              name: "BNB",
+              symbol: "BNB",
+              decimals: 18
+          },
+          blockExplorerUrls: ["https://opbnbscan.com"]
+      }]
+    });
+    await userProvider.send("eth_requestAccounts", []);
+    const signer = userProvider.getSigner();
+  
+    let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, signer);
+    await meta5Contract.withdrw(accountId); // 해당 ID를 요청함수에 전달
+  } catch(e) {
+    alert(e.data.message.replace('execution reverted: ',''))
+  }
+  };
 
 let Accession = async () => {
 let userProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
@@ -219,67 +216,10 @@ let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, sig
 const account = document.getElementById('Account').value;
 const amount = document.getElementById('Amount').value;
 try {
-  await meta5Contract.accession(document.getElementById(amount,account).value);
+  await meta5Contract.accession(parseInt(amount, 10), account);
 } catch(e) {
-  alert(e.data.message.replace('execution reverted: ',''))
+  let errorMessage = e.data && e.data.message ? e.data.message : e.message;
+  alert(errorMessage.replace('execution reverted: ', ''));
 }
 };
 
-
-let Levelup = async () => {
-  let userProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
-  await window.ethereum.request({
-    method: "wallet_addEthereumChain",
-    params: [{
-        chainId: "0xCC",
-        rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
-        chainName: "opBNB",
-        nativeCurrency: {
-            name: "BNB",
-            symbol: "BNB",
-            decimals: 18
-        },
-        blockExplorerUrls: ["https://opbnbscan.com"]
-    }]
-});
-  await userProvider.send("eth_requestAccounts", []);
-  let signer = userProvider.getSigner();
-
-  let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, signer);
-
-  try {
-    await meta5Contract.explevelup();
-  } catch(e) {
-    alert(e.data.message.replace('execution reverted: ',''))
-  }
-};
-
-
-
-let Originwithdraw= async () => {
-  let userProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
-  await window.ethereum.request({
-    method: "wallet_addEthereumChain",
-    params: [{
-        chainId: "0xCC",
-        rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
-        chainName: "opBNB",
-        nativeCurrency: {
-            name: "BNB",
-            symbol: "BNB",
-            decimals: 18
-        },
-        blockExplorerUrls: ["https://opbnbscan.com"]
-    }]
-});
-  await userProvider.send("eth_requestAccounts", []);
-  let signer = userProvider.getSigner();
-
-  let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, signer);
-
-  try {
-    await meta5Contract.originwithdraw();
-  } catch(e) {
-    alert(e.data.message.replace('execution reverted: ',''))
-  }
-};

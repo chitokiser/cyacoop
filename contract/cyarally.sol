@@ -68,6 +68,7 @@ contract cyarally {
     uint256 time; //가입날짜 
     uint256 cutreward; //보상처리결과
     uint256 mid;  
+    string invest; // 관람자비번
     uint256 metanum;  //가입계좌 번호
     uint256 init;  //최초가격
     address owner;  //가입자
@@ -83,7 +84,7 @@ contract cyarally {
 
 
 
-function registration(uint256 _metanum)public {   //랠리 참여 계좌등록
+function registration(uint256 _metanum,string memory  _invest)public {   //랠리 참여 데모계좌등록
     uint pay = (myfee[msg.sender]+1)*fee ; //최초값이 0이기 때문에 +1   
     require(cya.balanceOf(msg.sender) >= pay,"no cya");    
     require(cut.balanceOf(msg.sender) >= 5000,"no member"); 
@@ -97,6 +98,7 @@ function registration(uint256 _metanum)public {   //랠리 참여 계좌등록
     metainfo[mid].mid = mid;
     metainfo[mid].metanum = _metanum;
     metainfo[mid].init = 3000*1e18;
+    metainfo[mid].invest = _invest;   //관람자 비번
     metainfo[mid].owner = msg.sender;
     myfee[msg.sender] += 1;  //다음계좌등록시 등록비 증가
     mid += 1;

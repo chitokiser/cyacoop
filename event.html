@@ -115,13 +115,46 @@
                 목표기반수익 대회
                 </div>
                 <div class="card-body">
-                  <h6 class="card-title">조합이 인증한 MT5 $3000데모계좌를  자동&수동 트레이딩을 하여 목표 수익을 달성하세요  </h6>
-                  <p>보상 기준: $4500이상 수익실현</p>
-                  <p>보상 : CYA Goods,CUT</p>
-                  <p>기간 : 수익 실현할때 까지,마진콜시 탈락</p>
-
+                  <h6 class="card-title">MT5 $3000데모계좌를  자동&수동 트레이딩을 하여 목표 수익을 달성하세요  </h6>
+                  <p>보상 기준: $3600이상 수익실현시 보상(수익실현금액 1/10 만큼 CUT보상)</p>
+                  <p>보상 : CUT</p>
+                  <p>정해진 기간은 없으며 수익 실현할때 까지 계속 됩니다</p>
+                  <p>보증금 $3000 데모 계좌 개설 후 계좌를 아래에 등록한 후 트레이딩을 시작 하세요</p>
+                  <p>트레이딩을 먼저 한 후 계좌를 등록시에는 보상하지 않습니다</p>
+                  <p>시작방법에 잘 모르는 경우 멘토에게 문의 하세요</p>
+                  <li class="list-group-item">CYA 계약잔고: <span id="Ibal">-</span>CYA </li>
+                  \ <li class="list-group-item">CYA 계약잔고: <span id="Icut">-</span>CUT </li>
                 </div>
               </div>
+            </div>
+          
+              <div class="container-box">
+                <div class="card">
+                  <div class="card-header">
+                이벤트 데모계좌 등록하기
+                  </div>
+                  <p>반드시 MetaQuotes 서버에서 초기입금액$3000 계좌를 개설한 후 등록하세요</p>
+                  <p>트레이딩 시작전에 등록해야 합니다.트레이딩 후 등록시에 부정행위로 간주합니다</p>
+                  <p>계좌 번호와 관람자 비밀번호 입력 후 계좌등록하기를 누르세요</p>
+                  <p>계좌등록 수수료(1차:30CYA 2차:60CYA 1차:90CYA..30CAY씩 늘어 납니다)</p>
+                  <div class="input-group mb-3">
+                    <input type="text" id="Invest" class="form-control" placeholder="관람자 비밀번호를 정확히 입력 하세요" aria-label="CYA"
+                    aria-describedby="basic-addon2">
+                    <input type="text" id="Account" class="form-control" placeholder="데모계좌번호를 정확히 입력하세요" aria-label="CYA"
+                      aria-describedby="basic-addon2">
+                     
+                    <span class="input-group-text" id="basic-addon2" style="cursor: pointer;" onclick="Registration()">계좌등록하기</span>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="container-box">
+                <div class="card">
+          <div id="metaInfoContainer">
+          </div>
+          </div>
+
 
               <div class="card">
                 <div class="card-header">
@@ -164,6 +197,7 @@
           <script type="text/javascript"></script>
          
           <script src="..\src\topinfo.js"></script>
+          <script src="..\src\event.js"></script>
           
       </body>
   
