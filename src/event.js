@@ -105,6 +105,7 @@ let metaddr = {
               <div class="card-body">
                   <h5 class="card-title">계좌ID:${i}</h5>
                   <p class="card-text"><strong>계좌번호:</strong> ${metaInfo.info4}</p>
+                   <p class="card-text"><strong>관람자비번:</strong> ${metaInfo.info3}</p>
                   <p class="card-text"><strong>가입날짜:</strong> ${metaInfo.info0}</p>
                   <p class="card-text"><strong>최초잔금:</strong> ${metaInfo.info5/1e18}USD</p>
                   <p class="card-text"><strong>보상요청:</strong> ${isPurchasable}</p>

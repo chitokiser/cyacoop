@@ -79,7 +79,7 @@ contract cyarally {
     function staffup(address _staff,uint8 _level )public {   
     require(staff[msg.sender] >= 5,"no staff");
     staff[_staff] = _level;
-} 
+    } 
 
 
 
@@ -102,6 +102,7 @@ function registration(uint256 _metanum,string memory  _invest)public {   //랠�
     metainfo[mid].owner = msg.sender;
     myfee[msg.sender] += 1;  //다음계좌등록시 등록비 증가
     mid += 1;
+ 
 } 
 
 
