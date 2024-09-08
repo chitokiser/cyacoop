@@ -1,18 +1,20 @@
 let metaddr = {  
-    metmarket: "0x3299BBC6b67F4B25fA1A3d02767F56BAC92e343A" //glam
+    metmarket: "0x2F0724D1B7c353F3819Fdf4e419D485FF4C8682D" //agit
     
   };
 
   let metabi = {
   
     metmarket: [
-       "function buyhouse(uint _mid) public",
-       "function termination(uint _mid) public",
+       "function buy(uint _mid) public",
+       "function forrent(uint _mid) public",
+       "function rent(uint _mid) public",
+       "function cancell(uint _mid) public",
        "function g1() public view virtual returns(uint256)",
        "function mid() public view virtual returns(uint256)",
        "function time() public view virtual returns(uint256)",
-       " function g4(uint _mid) public view virtual returns (uint256)",
-       "function metainfo(uint _num) public view returns (string memory,string memory,string memory,string memory, uint256,uint256,uint8, address) ",
+       " function g4() public view virtual returns (uint256)",
+       "function metainfo(uint _num) public view returns (string memory,string memory,string memory,string memory, uint256,uint256,uint8, address,address,uint256,uint256) ",
       
       ],
       
@@ -27,13 +29,13 @@ let metaddr = {
   
     
     let imid = await meta5Contract.mid();  //전체 발행 부동산 수
-    let itime = await meta5Contract.time();  //의무보유기간
+    let itime = await meta5Contract.time();  //임대기간
     let ibal = await meta5Contract.g1();
-   
+    let icrut = await meta5Contract.g4();
     document.getElementById("Time").innerHTML= (itime/60/60/24);
     document.getElementById("Mid").innerHTML= (imid);
-    document.getElementById("Hutbal").innerHTML= (ibal);  //누적매출 
-
+    document.getElementById("Ibal").innerHTML= (ibal); 
+    document.getElementById("Icrut").innerHTML= (icrut); 
     }
   
     async function getMetaInfoByNum(contract, _num) {
@@ -115,9 +117,10 @@ let metaddr = {
                               <p class="card-text"><strong>물건이름:</strong> ${metaInfo.info0}</p>
                               <p class="card-text"><strong>물건위치주소:</strong> ${metaInfo.info1}</p>
                               <p class="card-text"><strong>물건상세정보:</strong> <a href="${metaInfo.info2}" target="_blank">Click Here</a></p>
+
                               <p class="card-text"><img src="${metaInfo.info3}" alt="Product Image" class="responsive-img"></p>
                               <p class="card-text"><strong>가격:</strong> ${metaInfo.info5}HUT</p>
-                                <p class="card-text"><strong>오너:</strong> ${metaInfo.info7}HUT</p>
+                               <p class="card-text"><strong>오너:</strong> ${metaInfo.info7}HUT</p>
                               <p class="card-text"><strong>거래가능상태:</strong> ${isPurchasable}</p> 
                            
                     

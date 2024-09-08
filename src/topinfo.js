@@ -76,6 +76,20 @@ document.getElementById("cPrice2").innerHTML=(1/bnbPrice).toFixed(4);
         });
       }
    
+      const addTokenCrut = async () => {
+        await window.ethereum.request({ 
+          method: 'wallet_watchAsset',
+          params: {
+            type: 'ERC20',
+            options: {
+              address: "0x73f7982c99c76b4Fe4D587D607dA32259D2bfAf4",  //cRut
+              symbol: "CRUT",
+              decimals: 0, 
+              // image: tokenImage,
+            },
+          },
+        });
+      }
 
 
  topData();

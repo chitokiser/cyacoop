@@ -40,13 +40,14 @@ contract crutbank {
   uint8 public act;  //배당 가능여부    1=매수가능 2=배당 가능 3=매도가능
   uint256 public allow;
   address public gover; // 시아거버넌스
+   address public cbank; // cutbank에 세금 일부 이체
   address public admin;
   uint256 public sold;  // cut 유통 수량
-  uint8 public commission; // 기본값 30
+  uint8 public commission; // 기본값 20
   uint256 public fix;  // 토큰 가격 안정화를 위한 허수 초기값 1e6
  
   uint256[] public chart; // 가격 챠트 구현을 위한 배열 저장
-  uint256 public price;  // mut 가격
+  uint256 public price;  
  
   mapping (address => uint) public staff;
   mapping (address => uint) public allowt; // 배당 시간 
@@ -57,7 +58,8 @@ contract crutbank {
     cya = Icya(_cya);
     cutbank = Icutbank(_cutbank);
     crut = Icrut(_crut);
-    gover = _gover;  // cut 뱅크
+    gover = _gover;  // 거버넌스
+    cbank = _cutbank;
     price = 1e16;
     sold = 1000;
     act =3 ;   //1배당가능 2토큰매수가능 3토큰매도가능
@@ -80,15 +82,21 @@ contract crutbank {
 
   function taxout() public {
   if(tax >= 1e20){  
-  cya.transfer(gover,g1()/2);
+  cya.transfer(gover,g1()*40/100);
+  cya.transfer(cbank,g1()*10/100);
   tax = 0;
   }
   }   
   
 
   function goverup(address _gover) public {  
-    require(staff[msg.sender] >= 5, "no staff");
+    require(admin == msg.sender, "no admin");
     gover = _gover;   // 초기값은  시아거버넌스에 줄 것
+  }
+
+    function cbankup(address _cbank) public {  
+    require(admin == msg.sender, "no admin");
+    cbank = _cbank;   // 초기값은  cutbank에 줄 것
   }
 
   function buycrut(uint _num) public returns(bool) {  
@@ -111,7 +119,7 @@ contract crutbank {
     return true;     
     }
 
-function assetadd(uint _fix) public {
+function assetadd(uint _fix) public{
     require(staff[msg.sender] >= 5, "no staff");  //자산의 가치를 추가하면 자동으로 나눠짐
     fix = _fix*1e18/1000000000;
 }
@@ -132,9 +140,11 @@ function sellcrut(uint num) public returns(bool) {
     return true;
 }
 
+
 function allowcation() public returns(bool) {   // depo 증가
     require(act >= 2, "No dividend");  
     require(cutbank.getlevel(msg.sender) >= 1, "no member");  
+     require(g8(msg.sender) >= 5000, "No crut");  
     require(allowt[msg.sender] + 7 days < block.timestamp, "not time"); // 주 1회
     require(crut.getdepot(msg.sender) + 7 days < block.timestamp, "crut not time"); // 주 1회
     allowt[msg.sender] = block.timestamp;
@@ -187,7 +197,7 @@ function g3() public view returns(uint) { // cut 잔고 확인
 function g6() public view virtual returns(uint256){  
   return crut.balanceOf(address(this));
   }
-function g8(address user) public view returns(uint) {  // 유저 cct 잔고 확인
+function g8(address user) public view returns(uint) {  // 유저 crut 잔고 확인
     return crut.balanceOf(user);
 }  
 

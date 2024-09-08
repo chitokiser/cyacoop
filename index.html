@@ -34,13 +34,13 @@
                     </li>
                     <li class="nav-item dropdown">
                       <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      조합서비스
+                      서비스
                       </a>
                       <ul class="dropdown-menu">
-                        <li class="dropdown-item"><a class="dropdown-item" href="../event.html">이벤트</a></li>
-                        <li class="dropdown-item"><a class="dropdown-item" href="../deducion.html">조합공제</a></li>
-                        <li class="dropdown-item"><a class="dropdown-item" href="../broker.html">FX브로커</a></li>
-              
+                        <li class="dropdown-item"><a class="dropdown-item" href="../event.html">MT5데모계좌이벤트</a></li>
+                        <li class="dropdown-item"><a class="dropdown-item" href="../deducion.html">FX실계좌공제</a></li>
+                        <li class="dropdown-item"><a class="dropdown-item" href="../agit.html">부동산현물거래소</a></li>
+                        <li class="dropdown-item"><a class="dropdown-item" href="../cyafarm.html">시아팜</a></li>
                       </ul>
                     </li>  
 
@@ -52,7 +52,7 @@
                       <ul class="dropdown-menu">
                         <li class="dropdown-item"><a class="dropdown-item" href="../cyadex.html">CYA</a></li>
                         <li class="dropdown-item"><a class="dropdown-item" href="../cut.html"> CUT</a></li>
-              
+                        <li class="dropdown-item"><a class="dropdown-item" href="../crut.html"> CRUT</a></li>
                       </ul>
                     </li>  
 
@@ -69,6 +69,8 @@
                   </li>
                  
                   <li class="dropdown-item"><a class="dropdown-item" href="#" onclick="addTokenHut()">CUT추가</a>
+                </li>
+                <li class="dropdown-item"><a class="dropdown-item" href="#" onclick="addTokenCrut()">CRUT추가</a>
                 </li>
                
                   </ul>
@@ -145,6 +147,55 @@
                 <span class="visually-hidden">Next</span>
               </button>
             </div>
+
+            <div class="container-box">
+              <div class="card">
+                <div class="card-header">
+                  공지사항
+                </div>
+                <div class="accordion" id="accordionExample">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        메타마스크 크롬 오류
+                      </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+                        <strong>크롬에서 메타마스크 작동오류 현상</strong>현재 지속적으로 메타마스크가 크롬 웹브라우져에서 지갑연결 불가 등 원인을 알 수 없는 오류를 일으키고 있습니다.마이크로 소프트 엣지등 다른 웹브라우저에서 메타마스크를 설치해서 해당 플랫폼을 이용해 주세요 
+                      </div>
+                   </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        협동조합설립 인가 추진
+                      </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+                        <strong>대전광역시 협동조합 설립 지원담당부서</strong>현물과 연계해야 하는 CRUT발행을 위해서는 조합이 해당부동산을 소유해야 하므로 실제 조합법인이 필요합니다. 협동조합기본법에 의거하여 설립하는 시아협동조합은 2024년 10월 중 설립완료 예정입니다.이사회는 이사장 임왕채,이사 김희경, 감사 오성미로 선출 되었습니다
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        MT5 데모계좌 등록 이벤트
+                      </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+                        <strong>조합서비스 추가</strong> 조합서비스>이벤트  MT5에서 데모계좌 개설 후 등록하여 트레이드 하면 수익실현에 대한 보상이 주어집니다.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+     
+
             <div class="container-box">
             <div class="card">
               <div class="card-header">
@@ -152,18 +203,17 @@
               </div>
               <div class="card-body">
                 <h6 class="card-title">시아 협동조합 설립목적 </h6>
-                <p> 원격 근무자들 간의 연결과 협력을 촉진하여, 다양한 배경과 전문성을 가진 사람들이 함께 성장할 수 있는 커뮤니티를 구축하는 것을 목표로 합니다</p>
+                <p> 조합원들 간의 연결과 협력을 촉진하여, 다양한 배경과 전문성을 가진 사람들이 함께 성장할 수 있는 커뮤니티를 구축하는 것을 목표로 합니다</p>
+              
                 <h6 class="card-title">시아 협동조합 주요활동 </h6>
-                <p>암호화폐 채굴: 조합원들이 공동으로 암호화폐를 채굴하고, 자동으로 수익을 분배합니다</p>
-                <p>연대한 조합의 힘으로 전세계 브로커사와 전략적  제휴를 통해 레퍼럴 활동을 하는 조합원의 수익을 극대화 합니다</p>
-                <p>자동매매 프로그램 개발: FX, 자원, 경제지수, 주식 등 다양한 금융 상품을  자동매매 프로그램을 활용하여 수익을 창출하고 분배하며 공유합니다</p>
+                <p>디지털 노머드 아카데미 운영</p>
+                <p>블록체인 부동산 등기 플랫폼 운영</p>
+            
                 <h6 class="card-title">조합원 혜택</h6>
                 <p>엄격한 테스트를 거친 CYA자동매매 프로그램 무상제공</p>
-                <p>목표기반 수익대회 참여</p>
-                <p>최고등급IB 수수료,자동매매수익 배당</p>
+                <p>MT5 데모계좌 목표기반 수익대회</p>
                 <p>레벨2이상 조합원 멘토 및  레퍼럴 활동지원</p>
-                <p>트레이더를 위한 위험분산 조합공제 사업</p>
-                <p>자동매매 프로그램 전문 트레이더 부트캠프 운영</p>
+          
                 <a href="..\file\cyawhitepaper.pdf" download="cyawhitepaper.pdf">
                   <button>Download Whitepaper</button>
                 </a>
