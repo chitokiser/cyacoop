@@ -99,11 +99,13 @@
       updateFarmCard(nftId);
   }
   
-  cyafarmContract.on('farmnum', (winnum) => {
-      console.log('구매한농장ID:', winnum);
-      document.getElementById('eventData').innerText = `예치한 슬롯 번호: ${winnum}`;
-  });
-  
+  document.addEventListener('DOMContentLoaded', () => {
+    cyafarmContract.on('farmnum', (winnum) => {
+        console.log('구매한농장ID:', winnum);
+        document.getElementById('eventData').innerText = `예치한 슬롯 번호: ${winnum}`;
+    });
+});
+
           
          };
        
