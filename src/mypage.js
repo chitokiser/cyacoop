@@ -143,41 +143,60 @@ let Bonuswithdraw = async () => {
 };
 
 
-// 페이지 로드 후 계약 초기화
 window.onload = async () => {
   if (window.ethereum) {
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner();
-    contract = new ethers.Contract(contractAddress.cutbank, contractAbi.cutbank, signer);
+    try {
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      contract = new ethers.Contract(contractAddress.cutbank, contractAbi.cutbank, signer);
+      console.log('계약이 초기화되었습니다.');
+    } catch (error) {
+      console.error('계약 초기화 중 오류:', error);
+      alert('계약 초기화 중 오류가 발생했습니다.');
+    }
   } else {
     alert('Ethereum 공급자가 없습니다. MetaMask를 설치해주세요.');
   }
 };
 
+
 // 주소 배열을 가져와서 HTML에 표시하는 함수
 const fetchAddresses = async () => {
   try {
+    // 사용자의 서명자 정보를 가져옴
     const signer = provider.getSigner();
     const userAddress = await signer.getAddress();
+    
+    // getmymenty 함수 호출
     console.log("Calling getmymenty with address:", userAddress);
-
     const addresses = await contract.getmymenty(userAddress);
+    
     console.log("Addresses returned:", addresses);
 
-    // HTML 업데이트
+    // 주소 리스트를 HTML에 업데이트
     const addressList = document.getElementById('addressList');
-    addressList.innerHTML = ''; // 이전 결과 삭제
-    addresses.forEach(address => {
+    addressList.innerHTML = ''; // 기존 리스트 초기화
+
+    // 주소가 정상적으로 반환되었는지 확인 후 목록 업데이트
+    if (addresses.length > 0) {
+      addresses.forEach(address => {
+        const listItem = document.createElement('li');
+        listItem.textContent = address;
+        addressList.appendChild(listItem);
+      });
+    } else {
+      // 주소가 없을 때 메시지 표시
       const listItem = document.createElement('li');
-      listItem.textContent = address;
+      listItem.textContent = "추천한 조합원이 없습니다.";
       addressList.appendChild(listItem);
-    });
+    }
   } catch (error) {
+    // 오류 발생 시 콘솔에 오류 메시지 출력 및 사용자에게 알림
     console.error('주소를 가져오는 중 오류가 발생했습니다:', error);
-    alert('주소를 가져오는 중 오류가 발생했습니다. 콘솔에서 확인해 주세요.');
+    alert('주소를 가져오는 중 오류가 발생했습니다. 다시 시도해 주세요.');
   }
 };
 
-// 버튼 클릭 시 주소 가져오기
+// 버튼 클릭 시 주소 가져오기 함수 실행
 document.getElementById('fetchAddresses').addEventListener('click', fetchAddresses);
