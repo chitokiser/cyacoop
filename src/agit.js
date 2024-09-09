@@ -1,5 +1,5 @@
 let metaddr = {  
-    metmarket: "0x2F0724D1B7c353F3819Fdf4e419D485FF4C8682D" //agit
+    metmarket: "0xEf04368eA4AB74C44BD0B700E0AAcB3eA82fd772" //agit
     
   };
 
@@ -34,7 +34,7 @@ let metaddr = {
     let icrut = await meta5Contract.g4();
     document.getElementById("Time").innerHTML= (itime/60/60/24);
     document.getElementById("Mid").innerHTML= (imid);
-    document.getElementById("Ibal").innerHTML= (ibal); 
+    document.getElementById("Ibal").innerHTML= (ibal/1e18); 
     document.getElementById("Icrut").innerHTML= (icrut); 
     }
   
@@ -48,12 +48,13 @@ let metaddr = {
                 info1: metaInfo[1], // 물건 위치 주소
                 info2: metaInfo[2], // 물건 정보 상세 페이지
                 info3: metaInfo[3], // 물건 사진
-                info4: metaInfo[4], // 시작시간
-                info5: metaInfo[5], // 가격
-                info6: metaInfo[6], // 거래가능성
+                info4: metaInfo[4], // crut기준 임대 보증금
+                info5: metaInfo[5], // crut반환해야할 보증금
+                info6: metaInfo[6], // 거래가능성 4:해지신청 3: 임대가능, 2: 사용중, 1: 거래가능 0:준비중
                 info7: metaInfo[7], // 사용자
-            
-            
+                info8: metaInfo[8], // 오너
+                info9: metaInfo[9], // 매매가격
+                info10: metaInfo[10], //임대시작시간
             };
         } catch (error) {
             console.error("Error fetching meta info:", error);
@@ -63,91 +64,108 @@ let metaddr = {
     
    
     async function displayMetaInfo() {
-      try {
-          // JSON-RPC 프로바이더 설정
-          let provider = new ethers.providers.JsonRpcProvider('https://opbnb-mainnet-rpc.bnbchain.org');
-  
-          // 메타데이터 컨트랙트 인스턴스 생성
-          let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, provider);
-  
-          // 전체 발행 계약 수 가져오기
-          let imid = await meta5Contract.mid();
-  
-          // HTML 컨테이너 가져오기
-          const infoContainer = document.getElementById("metaInfoContainer");
-          if (!infoContainer) {
-              console.error("HTML element 'metaInfoContainer' not found.");
-              return;
-          }
-  
-          // 각 mid에 대해 반복
-          for (let i = 0; i < imid; i++) {
-              try {
-                  const metaInfo = await getMetaInfoByNum(meta5Contract, i);
-                 
-                  if (metaInfo) {
-                      // 구매 가능 여부 설정
-                  
-                      let purchasableStatus;
-                      switch (metaInfo.info6) {
-                          case 0:
-                              purchasableStatus = '물건을 등록하세요';
-                              break;
-                          case 1:
-                              purchasableStatus = '사용중';
-                              break;
-                          case 2:
-                              purchasableStatus = '승인준비중';
-                              break;
-                          case 3:
-                              purchasableStatus = '거래가능';
-                              break;
-                          default:
-                              purchasableStatus = 'Unknown';
-                      }
-  
-                      
-                      
-                      const isPurchasable = purchasableStatus;
-             
-                      const infoHtml = `
-                      <div class="card mb-3">
-                          <div class="card-body">
-                              <h5 class="card-title">물건아이디${i}</h5>
-                              <p class="card-text"><strong>물건이름:</strong> ${metaInfo.info0}</p>
-                              <p class="card-text"><strong>물건위치주소:</strong> ${metaInfo.info1}</p>
-                              <p class="card-text"><strong>물건상세정보:</strong> <a href="${metaInfo.info2}" target="_blank">Click Here</a></p>
-
-                              <p class="card-text"><img src="${metaInfo.info3}" alt="Product Image" class="responsive-img"></p>
-                              <p class="card-text"><strong>가격:</strong> ${metaInfo.info5}HUT</p>
-                               <p class="card-text"><strong>오너:</strong> ${metaInfo.info7}HUT</p>
-                              <p class="card-text"><strong>거래가능상태:</strong> ${isPurchasable}</p> 
-                           
-                    
-                              <button type="button" class="btn btn-primary btn-sm mr-2" onclick="purchase(this)" data-id="${i}">구매하기</button>
-                              <p>구매 후 의무소유기간이 지난 다음에 판매가능합니다</p>
-                            
-                              <button type="button" class="btn btn-primary btn-sm mr-2" onclick="registerSale(this)" data-id="${i}">판매하기</button>
-                            <div>
-                           <button type="button" class="btn btn-dark btn-sm mt-2" onclick="gettime(this)" data-id="${i}">남은의무소유기간보기</button>
-                            <p id="remainingTime${i}" class="mt-2"></p>
-                           </div>
-                          </div>
-                      </div>`;
-                      infoContainer.innerHTML += infoHtml;
-                  }
-              } catch (error) {
-                  console.error(`mid ${i}에 대한 메타 정보 검색 오류:`, error);
-                  // 특정 오류를 처리하거나 기록하는 선택적인 처리
-              }
-          }
-      } catch (error) {
-          console.error("메타 정보 표시 중 오류 발생:", error);
-      }
-  }
-  
-  // 페이지 로드 시 정보 표시 함수 호출
-  window.onload = displayMetaInfo;
+        try {
+            // JSON-RPC 프로바이더 설정
+            let provider = new ethers.providers.JsonRpcProvider('https://opbnb-mainnet-rpc.bnbchain.org');
+    
+            // 메타데이터 컨트랙트 인스턴스 생성
+            let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, provider);
+    
+            // 전체 발행 계약 수 가져오기
+            let imid = await meta5Contract.mid();
+    
+            // HTML 컨테이너 가져오기
+            const infoContainer = document.getElementById("metaInfoContainer");
+            if (!infoContainer) {
+                console.error("HTML element 'metaInfoContainer' not found.");
+                return;
+            }
+    
+            // 각 mid에 대해 반복
+            for (let i = 0; i < imid; i++) {
+                try {
+                    const metaInfo = await getMetaInfoByNum(meta5Contract, i);
+                   
+                    if (metaInfo) {
+                        // 구매 가능 여부 설정
+                        let purchasableStatus;
+                        switch (metaInfo.info6) {
+                            case 0:
+                                purchasableStatus = '임대등록을 하세요';
+                                break;
+                            case 1:
+                                purchasableStatus = '매매거래가능 상태입니다';
+                                break;
+                            case 2:
+                                purchasableStatus = '임대자 사용상태';
+                                break;
+                            case 3:
+                                purchasableStatus = '임대가능';
+                                break;
+                            default:
+                                purchasableStatus = 'Unknown';
+                        }
+    
+                        const isPurchasable = purchasableStatus;
+    
+                        // 남은 임대 기간 계산 함수
+                        function calculateRemainingLeaseTime(startTimeInSeconds) {
+                            const leaseDurationInDays = 365; // 계약 기간 365일
+                            const secondsInADay = 86400; // 하루는 86,400초
+    
+                            const currentTimeInSeconds = Math.floor(Date.now() / 1000); // 현재 시간을 초로 변환
+    
+                            const elapsedTime = currentTimeInSeconds - startTimeInSeconds; // 경과 시간 계산
+                            const remainingTimeInSeconds = Math.max((leaseDurationInDays * secondsInADay) - elapsedTime, 0); // 남은 시간 계산
+    
+                            return Math.floor(remainingTimeInSeconds / secondsInADay); // 남은 시간을 일 단위로 반환
+                        }
+    
+                        // 남은 임대 기간을 가져옴
+                        const remainingDays = calculateRemainingLeaseTime(metaInfo.info10);
+    
+                        // 동적으로 HTML 생성
+                        const infoHtml = `
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">물건아이디${i}</h5>
+                                <p class="card-text"><strong>물건이름:</strong> ${metaInfo.info0}</p>
+                                <p class="card-text"><strong>물건위치주소:</strong> ${metaInfo.info1}</p>
+                                <p class="card-text"><strong>물건상세정보:</strong> <a href="${metaInfo.info2}" target="_blank">Click Here</a></p>
+                                <p class="card-text"><img src="${metaInfo.info3}" alt="Product Image" class="responsive-img"></p>
+                                <p class="card-text"><strong>임대보증금:</strong> ${metaInfo.info4}CRUT</p>
+                                <p class="card-text"><strong>반환해야할보증금:</strong> ${metaInfo.info5}CRUT</p>
+                                <p class="card-text"><strong>사용자:</strong> ${metaInfo.info7}</p>
+                                <p class="card-text"><strong>주인:</strong> ${metaInfo.info8}</p>
+                                <p class="card-text"><strong>매매가격:</strong> ${(metaInfo.info9 / 1e18).toFixed(2)}CYA</p>
+                                <p class="card-text"><strong>남은임대기간:</strong> ${remainingDays}일</p>
+                                <p class="card-text"><strong>거래가능상태:</strong> ${isPurchasable}</p>
+    
+                                <button type="button" class="btn btn-primary btn-sm mr-2" onclick="purchase(this)" data-id="${i}">구매하기</button>
+                                <button type="button" class="btn btn-primary btn-sm mr-2" onclick="registerSale(this)" data-id="${i}">임대등록하기</button>
+                                <div>
+                                    <button type="button" class="btn btn-dark btn-sm mt-2" onclick="Rent(this)" data-id="${i}">임대하기</button>
+                                    <button type="button" class="btn btn-dark btn-sm mt-2" onclick="Cancell(this)" data-id="${i}">임대종료하고 보증금(CRUT)돌려주기</button>
+                                    <p id="remainingTime${i}" class="mt-2"></p>
+                                </div>
+                            </div>
+                        </div>`;
+    
+                        infoContainer.innerHTML += infoHtml;
+                    }
+                } catch (error) {
+                    console.error(`mid ${i}에 대한 메타 정보 검색 오류:`, error);
+                    // 특정 오류를 처리하거나 기록하는 선택적인 처리
+                }
+            }
+        } catch (error) {
+            console.error("메타 정보 표시 중 오류 발생:", error);
+        }
+    }
+    
+    // 페이지 로드 시 정보 표시 함수 호출
+    window.onload = displayMetaInfo;
+    
   
   
 
@@ -179,7 +197,7 @@ const purchase = async (button) => {
     const signer = userProvider.getSigner();
 
     let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, signer);
-    await meta5Contract.buyhouse(accountId); // 해당 ID를 buy 함수에 전달하여 구매
+    await meta5Contract.buy(accountId); // 해당 ID를 buy 함수에 전달하여 구매
   } catch(e) {
     alert(e.data.message.replace('execution reverted: ',''))
   }
@@ -213,25 +231,72 @@ const registerSale = async (button) => {
     const signer = userProvider.getSigner();
 
     let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, signer);
-    await meta5Contract.termination(accountId);
+    await meta5Contract.forrent(accountId);
   } catch(e) {
     alert(e.data.message.replace('execution reverted: ',''))
   }
 };
 
-async function gettime(button) {
-    const id = button.getAttribute('data-id');
+
+// 임대하기 함수 구현
+const Rent = async (button) => {
     try {
-        // JSON-RPC 프로바이더 설정
-        let provider = new ethers.providers.JsonRpcProvider('https://opbnb-mainnet-rpc.bnbchain.org');
-        let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, provider);
-
-        let remainingTime = await meta5Contract.g4(id);
-        remainingTime =  Math.floor(remainingTime / 60 / 60 / 24);
-        document.getElementById(`remainingTime${id}`).innerText = `남은 사용 시간: ${remainingTime}일`;
-    } catch (error) {
-        console.error(`남은 사용 시간 조회 중 오류:`, error);
+      const accountId = button.getAttribute("data-id"); // 버튼의 data-id 속성 값 가져오기
+     
+  
+      const userProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
+      await window.ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [{
+            chainId: "0xCC",
+            rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
+            chainName: "opBNB",
+            nativeCurrency: {
+                name: "BNB",
+                symbol: "BNB",
+                decimals: 18
+            },
+            blockExplorerUrls: ["https://opbnbscan.com"]
+        }]
+      });
+      await userProvider.send("eth_requestAccounts", []);
+      const signer = userProvider.getSigner();
+  
+      let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, signer);
+      await meta5Contract.rent(accountId);
+    } catch(e) {
+      alert(e.data.message.replace('execution reverted: ',''))
     }
-}
+  };
 
 
+// 임대종료하고 보증금 돌려주기 함수 구현
+const Cancell = async (button) => {
+    try {
+      const accountId = button.getAttribute("data-id"); // 버튼의 data-id 속성 값 가져오기
+     
+  
+      const userProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
+      await window.ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [{
+            chainId: "0xCC",
+            rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
+            chainName: "opBNB",
+            nativeCurrency: {
+                name: "BNB",
+                symbol: "BNB",
+                decimals: 18
+            },
+            blockExplorerUrls: ["https://opbnbscan.com"]
+        }]
+      });
+      await userProvider.send("eth_requestAccounts", []);
+      const signer = userProvider.getSigner();
+  
+      let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, signer);
+      await meta5Contract.cancell(accountId);
+    } catch(e) {
+      alert(e.data.message.replace('execution reverted: ',''))
+    }
+  };
