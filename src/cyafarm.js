@@ -49,51 +49,51 @@
     
     const nftIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,15];
   
-  const updateFarmCard = async (nftId) => {
+    const updateFarmCard = async (nftId) => {
       const depoInfo = await cyafarmContract.port(nftId);
       const valueInfo = await cyafarmContract.getvalue(nftId);
       const ownerInfo = depoInfo[3]; // 소유자 정보 추가 
+
       const card = document.createElement("div");
-      card.className = "card";
-      
+      card.className = "card stylish-card";
+
       const cardBody = document.createElement("div");
       cardBody.className = "card-body";
-      
+
       const cardTitle = document.createElement("h6");
-      cardTitle.className = "card-title";
+      cardTitle.className = "card-title stylish-title";
       cardTitle.textContent = `예치슬롯 ${nftId}`;
-      
+
       const depoText = document.createElement("p");
-      depoText.className = "card-text";
+      depoText.className = "card-text stylish-text";
       depoText.textContent = `최초예치금 : ${depoInfo[0]/1e18}CYA`;
-      
+
       const deponText = document.createElement("p");
-      deponText.className = "card-text";
+      deponText.className = "card-text stylish-text";
       deponText.textContent = `예치순서 : ${depoInfo[1]} 번째`;
-      
-      
+
       const valueText = document.createElement("p");
-      valueText.className = "card-text";
+      valueText.className = "card-text stylish-text";
       valueText.textContent = `예치금현재가치 : ${valueInfo/1e18} CYA`;
-      
+
       // 소유자 정보를 추가
       const ownerText = document.createElement("p");
-      ownerText.className = "card-text";
+      ownerText.className = "card-text stylish-text";
       ownerText.textContent = `예금주 : ${ownerInfo}`;
-      
+
+      // 카드 내용 구성
       cardBody.appendChild(cardTitle);
       cardBody.appendChild(depoText);
       cardBody.appendChild(deponText);
       cardBody.appendChild(valueText);
-      // 카드 하단에 소유자 정보를 추가
-      cardBody.appendChild(ownerText);  
+      cardBody.appendChild(ownerText);
       card.appendChild(cardBody);
-      
+
       // 카드를 farmCards div에 추가
       const farmCards = document.getElementById("farmCards");
       farmCards.appendChild(card);
   };
-  
+
   // 위에서 정의한 함수를 사용하여 농장 카드 업데이트
   for (const nftId of nftIds) {
       updateFarmCard(nftId);
