@@ -1,4 +1,5 @@
- 
+
+
       const cA = {
         cyadexAddr: "0x3900609f4b3C635ae1cFC84F4f86eF7166c6139e",
         cyamemAddr: "0x3Fa37ba88e8741Bf681b911DB5C0F9d6DF99046f",   
@@ -26,25 +27,24 @@
           "function allowance(address owner, address spender) external view returns (uint256)"
         ]
       };
-
-      const topData= async () => {
-        
-
-         // BNB Price
-const responseBinanceTicker = await axios.get('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT');
-const bnbPrice = parseFloat(responseBinanceTicker.data.price);
-document.getElementById("bPrice").innerHTML=bnbPrice.toFixed(4);
-document.getElementById("cPrice2").innerHTML=(1/bnbPrice).toFixed(4);
-
-
-        // ethers setup
-        let provider = new ethers.providers.JsonRpcProvider('https://opbnb-rpc.publicnode.com');
-        let cyadexContract = new ethers.Contract(cA.cyadexAddr,cB.cyadex, provider); 
-        let dexBal = await cyadexContract.balance();
-        document.getElementById("Tvl").innerHTML=  parseFloat(dexBal/1e18).toFixed(4); 
-          
+      const topData = async () => {
+        try {
+          const responseBinanceTicker = await axios.get('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT');
+          const bnbPrice = parseFloat(responseBinanceTicker.data.price);
+          document.getElementById("bPrice").innerHTML = bnbPrice.toFixed(4);
+          document.getElementById("cPrice2").innerHTML = (1 / bnbPrice).toFixed(4);
+      
+          // ethers setup
+          const provider = new ethers.providers.JsonRpcProvider('https://1rpc.io/opbnb');
+          let cyadexContract = new ethers.Contract(cA.cyadexAddr, cB.cyadex, provider);
+          let dexBal = await cyadexContract.balance();
+          document.getElementById("Tvl").innerHTML = parseFloat(dexBal / 1e18).toFixed(4);
+        } catch (error) {
+          console.error("Error fetching top data:", error);
+          alert("데이터를 가져오는 중 오류가 발생했습니다.");
+        }
       };
-   
+      
       const addTokenCya = async () => {
         await window.ethereum.request({
           method: 'wallet_watchAsset',
