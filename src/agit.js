@@ -24,7 +24,7 @@ let metaddr = {
 
   let topSync = async () => {
 
-    let provider = new ethers.providers.JsonRpcProvider('https://opbnb-mainnet.nodereal.io/v1/64a9df0874fb4a93b9d0a3849de012d3');
+    let provider = new ethers.providers.JsonRpcProvider('https://opbnb-rpc.publicnode.com');
     let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, provider);
   
     

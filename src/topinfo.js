@@ -38,7 +38,7 @@ document.getElementById("cPrice2").innerHTML=(1/bnbPrice).toFixed(4);
 
 
         // ethers setup
-        let provider = new ethers.providers.JsonRpcProvider('https://opbnb-mainnet-rpc.bnbchain.org');
+        let provider = new ethers.providers.JsonRpcProvider('https://opbnb-rpc.publicnode.com');
         let cyadexContract = new ethers.Contract(cA.cyadexAddr,cB.cyadex, provider); 
         let dexBal = await cyadexContract.balance();
         document.getElementById("Tvl").innerHTML=  parseFloat(dexBal/1e18).toFixed(4); 
