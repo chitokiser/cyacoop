@@ -1,6 +1,6 @@
 let contractAddress = {
   cutbank: "0x04F30f139260e36BF8A857e05e4863a94731f2ff",  //new cutbank
-
+  expbuff: "0xE0Ef1A9e6F662073FA940b071BDEaE88f92a486C",  //expbuff
   };
   let contractAbi = {
    
@@ -31,8 +31,12 @@ let contractAddress = {
       "function levelup() public",
       "function getmymenty(address user) public view returns (address[] memory)"
 
-    ]
+    ],
 
+    expbuff: [
+      "function expbuffing() public",
+    ]
+,
 
   };
 
@@ -142,6 +146,35 @@ let Bonuswithdraw = async () => {
 
 };
 
+
+let Buff = async () => {
+   
+  let userProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  await window.ethereum.request({
+    method: "wallet_addEthereumChain",
+    params: [{
+        chainId: "0xCC",
+        rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
+        chainName: "opBNB",
+        nativeCurrency: {
+            name: "BNB",
+            symbol: "BNB",
+            decimals: 18
+        },
+        blockExplorerUrls: ["https://opbnbscan.com"]
+    }]
+});
+  await userProvider.send("eth_requestAccounts", []);
+  let signer = userProvider.getSigner();
+  let expbuffContract = new ethers.Contract(contractAddress.expbuff, contractAbi.expbuff, signer);
+  
+  try {
+    await expbuffContract.expbuffing(); 
+  } catch(e) {
+    alert(e.data.message.replace('실행이 되돌려졌습니다: ',''))
+  }
+
+};
 
 window.onload = async () => {
   if (window.ethereum) {

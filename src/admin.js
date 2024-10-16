@@ -1,25 +1,17 @@
 let metaddr = {  
-    metmarket: "0xDDC853110083C1fe61Cc5F28c7A3DdC332DAc425" //metmarket2 
+    metmarket: "0xcea1BF8D64DF231D757DE2Fc11ebB4B64d345B79" //pack1
     
   };
 
   let metabi = {
   
     metmarket: [
-       "function buy(uint _mid) public",
-       "function approval(uint _mid) public",
-       "function buytiket()public ",
-       "function getmyInfo(address _user) external view returns (uint256, uint256, uint256[] memory,string memory)",
-       "function mid() public view returns (uint256)",
-       "function tax() public view returns (uint256)",
-       "function g1() public view virtual returns(uint256)",
-       "function selladd(uint _mid,uint256 _init) public",
-       "function getmainpass(uint _mid) external view returns (string memory)",
-       "function getpass(uint256 _mid) external view returns (string memory)",  //관람자패스
-       "function getmetainfo(uint _num) public view returns (uint256, uint256, string memory, uint256,uint8, address,address) ",
-       "function charge(uint _pay) public",
-       "function masterup(string memory _tel) public",
-       "function newmeta(uint _metanum,string memory _investor,uint256 _init,string memory _mainpass,uint _mid) public"
+       "function memberadd(uint _pid,address user) public",
+       "function delivery(uint _bid) public",
+       "function getmetainfo(uint _num) public view returns (string memory,string memory,string memory, uint256,uint256,uint256) ",
+       "function memberadd(uint _pid,address user) public",
+       "function delivery(uint _bid) public",
+       "function newMeta(string memory _name,string memory _detail, string memory _img, uint256 _price,uint256 _left,uint256 _rate) public onlyStaff(5)"
       ],
       
 
