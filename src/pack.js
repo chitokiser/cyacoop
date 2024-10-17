@@ -1,15 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
     let metaddr = {
-        metmarket: "0xcea1BF8D64DF231D757DE2Fc11ebB4B64d345B79" //newpack
+        metmarket: "0x74d9A08baA32Cc3720C87df31b457389f016F145" //newpack
     };
 
     let metabi = {
         metmarket: [
-            "function buy(uint _pid) public",
-            " function memberadd(uint _pid,address user) public",
+            "function buy(uint _pid,uint num,string memory name,string memory house,string memory phone) public",
             "function pid() public view virtual returns(uint256)",
             "function bid() public view virtual returns(uint256)",
-            "function depowithdraw() public",
+            "function g1() public view virtual returns(uint256)",
             "function metainfo(uint _num) public view returns (string memory,string memory,string memory,uint256,uint256,uint256)",
             "function bs(uint _num) public view returns (uint256,uint256,uint8,uint256,address)",
         ],
@@ -19,13 +18,13 @@ document.addEventListener("DOMContentLoaded", function () {
         let provider = new ethers.providers.JsonRpcProvider('https://opbnb-mainnet-rpc.bnbchain.org');
         let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, provider);
         
-        let ipid = await meta5Contract.pid();  // 전체 제품 수
-        let ibid = await meta5Contract.bid();  // 구매자 수
-        let ibal = await meta5Contract.g1();
+        let ipid = await meta5Contract.pid();  // 전체 꾸러미 종류
+        let ibid = await meta5Contract.bid();  // 전체 구매자 수
+        let ibal = await meta5Contract.g1();   //계약잔고
 
         document.getElementById("Pid").innerHTML = ipid;
         document.getElementById("Bid").innerHTML = ibid;
-        document.getElementById("Cyabal").innerHTML = ibal;  // 누적 매출
+        document.getElementById("Cyabal").innerHTML = ibal/1e18;  // 누적 매출
     };
 
     async function getMetaInfoByNum(contract, _num) {
@@ -63,21 +62,32 @@ document.addEventListener("DOMContentLoaded", function () {
                             <div class="card-body">
                                 <h5 class="card-title">물건 아이디 ${i}</h5>
                                 <p class="card-text"><strong>물건 이름:</strong> ${metaInfo.info0}</p>
-                                <p class="card-text"><strong>물건 상세 정보:</strong> <a href="${metaInfo.info1}" target="_blank">Click Here</a></p>
+                                <p class="card-text"><strong>물건 상세 정보:</strong> ${metaInfo.info1}</p>
                                 <p class="card-text"><img src="${metaInfo.info2}" alt="Product Image" class="responsive-img"></p>
                                 <p class="card-text"><strong>남은 수량:</strong> ${metaInfo.info3}개</p>
                                  <p class="card-text"><strong>수당비율:</strong> ${metaInfo.info4}%</p>
                                 <p class="card-text"><strong>가격:</strong> ${metaInfo.info5/1e18}CYA</p>
                                 <button type="button" class="btn btn-primary btn-sm mr-2" onclick="openPurchaseForm(${i})">구매하기</button>
                                 <div class="purchase-form-container" id="purchaseFormContainer${i}" style="display: none;">
-                                    <form class="purchase-form">
-                                        <label for="productId${i}">제품 ID:</label>
-                                        <input type="text" id="productId${i}" name="productId" readonly value="${i}"><br>
-                                        <label for="quantity${i}">구매 수량:</label>
-                                        <input type="number" id="quantity${i}" name="quantity" min="1" required><br>
-                                        <button type="button" onclick="submitPurchaseForm(${i})">입력 완료</button>
-                                        <button type="button" onclick="closePurchaseForm(${i})">취소</button>
-                                    </form>
+                                <form class="purchase-form">
+    <label for="productId">제품 ID:</label>
+    <input type="text" id="productId" name="productId" readonly value="${i}"><br>
+    
+    <label for="quantity">구매 수량:</label>
+    <input type="number" id="quantity" name="quantity" min="1" required><br>
+
+    <label for="buyerName">구매자 이름:</label>
+    <input type="text" id="buyerName" name="buyerName" required><br>
+
+    <label for="house">주소:</label>
+    <input type="text" id="house" name="house" required><br>
+
+    <label for="phone">전화번호:</label>
+    <input type="text" id="phone" name="phone" required><br>
+
+    <button type="button" onclick="submitPurchaseForm(${i})">입력 완료</button>
+    <button type="button" onclick="closePurchaseForm(${i})">취소</button>
+</form>
                                 </div>
                             </div>
                         </div>`;
@@ -110,15 +120,16 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     window.submitPurchaseForm = async function (productId) {
-        const buyerName = document.getElementById(`buyerName${productId}`).value;
-        const address = document.getElementById(`address${productId}`).value;
-        const phoneNumber = document.getElementById(`phoneNumber${productId}`).value;
+        
         const quantity = document.getElementById(`quantity${productId}`).value;
+        const buyerName = document.getElementById(`buyerName${productId}`).value;
+        const address = document.getElementById(`house${productId}`).value;
+        const phoneNumber = document.getElementById(`phone{productId}`).value;
 
-        await buy(productId, buyerName, address, phoneNumber, quantity);
+        await buy(productId,quantity, buyerName, address, phoneNumber);
     };
 
-    async function buy(productId, buyerName, address, phoneNumber, quantity) {
+    async function buy(productId,quantity, buyerName, address, phoneNumber) {
         try {
             const userProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
             await window.ethereum.request({
@@ -138,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
             await userProvider.send("eth_requestAccounts", []);
             const signer = userProvider.getSigner();
             let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, signer);
-            await meta5Contract.buy(productId, buyerName, address, phoneNumber, quantity);
+            await meta5Contract.buy(productId,quantity, buyerName, address, phoneNumber);
             alert('구매가 완료되었습니다.');
             closePurchaseForm(productId); // 구매가 완료되면 폼을 닫습니다.
         } catch (error) {
