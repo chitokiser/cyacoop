@@ -45,7 +45,7 @@
        let iprice = await cyabankContract.getprice();
        let iallow = await cyabankContract.allow();
        let iact = await cyabankContract.act();  //거래가능상태
-       document.getElementById("Cyabal").innerHTML = (cyabal/1e18).toFixed(4);
+       document.getElementById("Cyabal").innerHTML = (cyabal/2e21).toFixed(4);
        document.getElementById("Mutbal").innerHTML = (mutbal);
        document.getElementById("Mutcir").innerHTML = (mutcir);
        document.getElementById("Mprice").innerHTML = (iprice/1e18).toFixed(4);

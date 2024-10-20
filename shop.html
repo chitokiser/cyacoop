@@ -109,72 +109,66 @@
             </div>
           </div>
             <!--This is the dashboard -->
+  
+  
+  <body>
 
-            
-            <div class="container-box">
-              <div class="card">
-                <div class="card-header">
-                CYA Token 교환소
-                </div>
-                <div class="card-body">          
 
-  <p>CYA는 opBNB(네트워크 ID: 204)를 기반으로 발행됩니다.</p>
-  <p>CYA는 1달러당 opBNB로 교환할 수 있습니다</p>
-  <p>BNB:opBNB 공식 교환소 => <a class="navbar-brand" href="https://opbnb-bridge.bnbchain.org/withdraw">
-    <img src="\images\logo\opBNB.png" alt="" width="800" height="400">
-  </a> </p>
+    <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      </div>
 
+     
+
+
+
+
+    <div class="bg-light p-5 rounded">
+        <h5>시아 샵</h5>
+        <p>시아제품을 구입하면 CUT이 자동으로 제공됩니다</p>
+        <p>[이름,받을 주소,전화번호]등록 후 구매하기 버튼을 클릭하여 주시기 바랍니다</p>
+        <p>배송지 주소지등 정보를 변경할 할 경우 [정보변경]을 하여 주시기 바랍니다</p>
+        <p style="color: rgb(239, 109, 10);">상단 우측메뉴에서 지갑연결>지갑등록 완료 후 구매하셔야 합니다</p>
+
+    <p>담당자 연락처:010-3687-0314</p>
+    <p>거래를 하려면 CYAToken을 소유하고 있어야 합니다</p>
+    <p>등록물건수: <span id="Pid">-</span>개</p>
+    <p>구매자수: <span id="Bid">-</span>개</p>
+    <p>CYA잔고: <span id="Cyabal">-</span>CYA</p>
+    <p>CUT잔고: <span id="Cutbal">-</span>CUT</p>
 
 </div>
-</div>
-</div>
 
-<div class="alert alert-info" role="alert">
-  <P>BNB:CYA BNB를 투입하면 CYA가 교환됩니다. </P>
+
+
+<div id="metaInfoContainer"></div>
+
+
+<div id="buyerInfoContainer"></div>
+<div>
+    <label for="buyerIdInput">Buyer ID:</label>
+    <input type="number" id="buyerIdInput" min="0">
+    <button onclick="displayBuyerInfo()">Get Buyer Info</button>
+</div>
  
+    <!--Start footer -->
 
-<div class="input-group mb-3">
-  <span class="input-group-text" id="basic-addon1">BNB input</span>
-  <input id="bnbInput" type="text" class="form-control" placeholder="여기에 BNB를 입력하세요(소수점 사용 가능)...." aria-label="Username" aria-describedby="basic -addon1">
-</div>
-
-<div class="input-group mb-3">
-  <input id="bnbOutput" type="text" class="form-control" placeholder="여기에 교환되는 CYA가 표시됩니다...." aria-label="Recipient's username" aria-describedby="basic-addon2">
-  <span onclick="buyCya()" style="cursor: pointer;" class="input-group-text" id="basic-addon2">교환하기</span>
-</div>
-</div>
-
-<div class="alert alert-info" role="alert">
-  <P>CYA:BNB CYA를 투입하면 BNB가 교환됩니다. </P>
-
-<div class="input-group mb-3">
-  <span class="input-group-text" id="basic-addon1">CYA input</span>
-  <input id="cyaInput" type="text" class="form-control" placeholder="여기에 교환활 CYA개수를 입력하세요"aria-label="Username" aria-describedby="basic-addon1">
-</div>
-<div class="input-group mb-3">
- 
-  <input id="cyaOutput" type="text" class="form-control" placeholder="여기에 교환될 BNB가 표시됩니다" aria-label="Recipient's username" aria-describedby="basic-addon2">
-  <span onclick="sellCya()" style="cursor: pointer;" class="input-group-text" id="basic-addon2">교환하기</span>
-</div>
-</div>
-      
-        
- <!--Start footer -->
-
- <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+    <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
                
-  <p>We do not collect personal information</p>
- </div>
-<!-- End footer -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> 
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.2.0/ethers.umd.min.js" integrity="sha384-..." crossorigin="anonymous"></script>
-    <script type="text/javascript"></script>  
-    <script src="../src/topinfo.js"></script>
-    <script src="../src/cyadex.js"></script>   
-            
-  </body>
+      <p>We do not collect personal information</p>
+     </div>
+ <!-- End footer -->
 
-</html>
+</main>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.2.0/ethers.umd.min.js" integrity="sha384-..." crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript"></script>
+<script src="../src/topinfo.js"></script>
+<script src="../src/shop.js"></script>   
+
