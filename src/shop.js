@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ],
     };
 
-    let topSync = async () => {
+    let topSync = async () => {  
         let provider = new ethers.providers.JsonRpcProvider('https://opbnb-mainnet-rpc.bnbchain.org');
         let meta5Contract = new ethers.Contract(metaddr.metmarket, metabi.metmarket, provider);
         
